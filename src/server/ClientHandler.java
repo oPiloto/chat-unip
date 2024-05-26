@@ -23,7 +23,7 @@ public class ClientHandler implements Runnable {
                 clientHandlers.add(this);
             }
 
-            broadcastMessage(Colored.RESET + "[SERVER]: " + chatColor + userName + Colored.RESET + " entrou.");
+            broadcastMessage("[SERVER]: " + userName + " entrou.");
         } catch (IOException e) {
             closeAll(socket, bufferedReader, bufferedWriter);
         }
@@ -69,7 +69,7 @@ public class ClientHandler implements Runnable {
     }
 
     public void removeClient() {
-        broadcastMessage(Colored.RESET + "[SERVER]: " + chatColor + userName + Colored.RESET + " saiu.");
+        broadcastMessage("[SERVER]: " + userName + " saiu.");
         synchronized (clientHandlers) {
             clientHandlers.remove(this);
         }
@@ -81,7 +81,7 @@ public class ClientHandler implements Runnable {
             try {
                 String message = bufferedReader.readLine();
                 if (message != null) {
-                    broadcastMessage(chatColor + userName + Colored.RESET + ": " + message);
+                    broadcastMessage(userName + ": " + message);
                 } else {
                     closeAll(socket, bufferedReader, bufferedWriter);
                     break;

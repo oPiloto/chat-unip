@@ -1,6 +1,7 @@
 package client;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -22,14 +23,15 @@ public class ChatWindow extends Window {
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
     private String userName = "";
+
     private JTextField southPanelTextField;
     private JButton northPanelClearChatButton;
+    private JLabel userNameLabel;
 
     public ChatWindow(int x, int y, Socket socket) {
-        super("Chat", x, y, 400, 400, WindowConstants.EXIT_ON_CLOSE);
+        super("Chat", x, y, 440, 440, WindowConstants.EXIT_ON_CLOSE);
 
         this.setLayout(new BorderLayout(2, 2));
-        this.setSize(400, 400);
         this.setResizable(false);
 
         try {
@@ -49,7 +51,7 @@ public class ChatWindow extends Window {
     protected void setupComponents() {
         JPanel southPanel = new JPanel();
         JButton southPanelButton = new JButton("Enviar");
-        this.southPanelTextField = new JTextField(27);
+        this.southPanelTextField = new JTextField(31);
         southPanelTextField.addActionListener(this::onSendMessage);
         southPanelButton.addActionListener(this::onSendMessage);
         southPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 4, 4));
@@ -59,7 +61,7 @@ public class ChatWindow extends Window {
 
         this.textPane = new JTextPane();
         this.textPane.setEnabled(false);
-        this.textPane.setText("Insira o seu nome do campo de texto abaixo e clique em enviar!");
+        this.textPane.setText("Insira o nome de usuário no campo de texto abaixo e clique em enviar!");
         JScrollPane scrollPane = new JScrollPane(textPane);
         this.add(scrollPane, BorderLayout.CENTER);
 
@@ -67,8 +69,10 @@ public class ChatWindow extends Window {
         this.northPanelClearChatButton = new JButton("Limpar");
         this.northPanelClearChatButton.setEnabled(false);
         this.northPanelClearChatButton.addActionListener(this::clearChat);
+        this.userNameLabel = new JLabel("");
         northPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 4, 4));
         northPanel.add(northPanelClearChatButton);
+        northPanel.add(userNameLabel);
         this.add(northPanel, BorderLayout.NORTH);
     }
 
@@ -88,6 +92,7 @@ public class ChatWindow extends Window {
             bufferedWriter.flush();
             if (userName.isEmpty()) {
                 this.userName = message;
+                this.userNameLabel.setText(message);
                 this.clearChat(null);
                 this.receiveMessage();
                 this.northPanelClearChatButton.setEnabled(true);
